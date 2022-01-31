@@ -1,10 +1,16 @@
+import axios from 'axios'
 import { useReducer } from 'react';
 
-function authenticate(options) {
-  return fetch('/authenticate', {
-    method: 'POST',
-    ...options,
-  }).then((res) => res.json());
+export async function authenticate(user) {
+  try {
+    const { data } = await axios.post('/authenticate', {
+      data: user
+    })
+
+    return data;
+  } catch (e) {
+    throw e
+  }
 }
 
 const reducer = (user, action) => {
@@ -21,14 +27,14 @@ const reducer = (user, action) => {
 export function useAuth() {
   const [user, dispatch] = useReducer(reducer, null);
 
-  const logIn = ({ username, password }) => {
-    authenticate(username, password)
-      .then(({ user }) => {
-        dispatch({ type: 'LOG_IN', user });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const logIn = async ({ username, password }) => {
+    try {
+      const body = JSON.stringify({ username, password })
+      const { user } = await authenticate(body)
+      dispatch({ type: 'LOG_IN', user });
+    } catch(error) {
+      console.log(error);
+    }
   };
 
   return [user, logIn];

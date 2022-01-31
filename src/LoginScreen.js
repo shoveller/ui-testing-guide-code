@@ -42,6 +42,7 @@ const LoginForm = ({ onSubmit, ...props }) => (
           type="email"
           autoComplete="email"
           required
+          data-testid="email"
         />
       </FormControl>
       <FormControl id="password">
@@ -51,6 +52,7 @@ const LoginForm = ({ onSubmit, ...props }) => (
           name="password"
           type="password"
           required
+          data-testid="password"
         />
       </FormControl>
       <Button type="submit" variant="submit" size="lg" fontSize="md">
